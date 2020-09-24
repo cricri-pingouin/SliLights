@@ -315,8 +315,8 @@ begin
   //Initialise options from INI file
   myINI := TINIFile.Create(ExtractFilePath(Application.EXEName) + 'SliLights.ini');
   //Read settings from INI file
-  ColourOn := myINI.ReadInteger('Settings', 'ColourOn', 255);
-  ColourOff := myINI.ReadInteger('Settings', 'ColourOff', 128);
+  ColourOn := myINI.ReadInteger('Settings', 'ColourOn', $00FF80FF);
+  ColourOff := myINI.ReadInteger('Settings', 'ColourOff', $00C08080);
   RandomDefault := myINI.ReadInteger('Settings', 'RandomDefault', 6);
   if RandomDefault > MaxRandom then
     RandomDefault := MaxRandom;
