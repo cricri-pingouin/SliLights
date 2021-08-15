@@ -113,11 +113,6 @@ implementation
 
 {$R *.dfm}
 
-function Pow2(Power: Integer): Integer; //This works fine
-begin
-  Result := 1 shl Power;
-end;
-
 procedure TForm1.CheckWin;
 var
   i: Integer;
@@ -135,18 +130,20 @@ begin
   begin
     if IsRandom then
     begin
-      ShowMessage('You win in ' + IntToStr(Clicks) + ' clicks!');
+      ShowMessage('You won a ' + IntToStr(RandomDefault) + ' clicks random level in ' + IntToStr(Clicks) + ' clicks!');
       RestartLevel();
-      Exit;
-    end;
-    if CurrentLevel < 99 then
+    end
+    else if CurrentLevel < 99 then
     begin
-      ShowMessage('You win in ' + IntToStr(Clicks) + ' clicks!');
+      ShowMessage('You won level ' + IntToStr(CurrentLevel + 1) + ' in ' + IntToStr(Clicks) + ' clicks!');
       Inc(CurrentLevel);
       RestartLevel();
     end
     else
+    begin
       ShowMessage('You have completed the last level in ' + IntToStr(Clicks) + ' clicks!');
+      RestartLevel();
+    end;
   end;
 end;
 
@@ -174,10 +171,8 @@ begin
   begin
     ThisRow := TheseLevels[CurrentLevel][Row];
     for Col := 0 to 4 do
-    begin
-      if (ThisRow and Pow2(Col)) = Pow2(Col) then
+      if (ThisRow and (1 shl Col)) = (1 shl Col) then
         Invert(Row * 5 + Col);
-    end;
   end;
   Form1.Caption := 'SliLights, Level ' + IntToStr(CurrentLevel + 1);
   IsRandom := False;
@@ -271,7 +266,7 @@ begin
     RandomDefault := strtoint(Choice) + 0;
   if (RandomDefault < 1) or (RandomDefault > MaxRandom) then
     RandomDefault := MaxRandom;
-  ClearAll;
+  ClearAll();
   Randomize;
   for i := 1 to RandomDefault do
     Press(Random(25));
@@ -311,8 +306,6 @@ begin
   if RandomDefault > MaxRandom then
     RandomDefault := MaxRandom;
   myINI.Free;
-  ClearAll;
-  WinGame := True;
   Form1.ClientWidth := 5 * shp1.Width;
   Form1.ClientHeight := 5 * shp1.Height;
   RestartLevel();
