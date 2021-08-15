@@ -35,11 +35,7 @@ type
     shp25: TShape;
     mmMenu: TMainMenu;
     mniMenu: TMenuItem;
-    mniLevel1: TMenuItem;
-    mniLevel2: TMenuItem;
-    mniLevel3: TMenuItem;
-    mniLevel4: TMenuItem;
-    mniLevel5: TMenuItem;
+    mniRestart: TMenuItem;
     mniRandom: TMenuItem;
     mniClicks: TMenuItem;
     mniHelp: TMenuItem;
@@ -50,6 +46,7 @@ type
     mniExit: TMenuItem;
     procedure CheckWin;
     procedure ClearAll;
+    procedure RestartLevel;
     procedure Invert(Index: Integer);
     procedure Press(Index: Integer);
     procedure UserPress(Index: Integer);
@@ -78,11 +75,6 @@ type
     procedure shp23MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure shp24MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure shp25MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure mniLevel1Click(Sender: TObject);
-    procedure mniLevel2Click(Sender: TObject);
-    procedure mniLevel3Click(Sender: TObject);
-    procedure mniLevel4Click(Sender: TObject);
-    procedure mniLevel5Click(Sender: TObject);
     procedure mniRandomClick(Sender: TObject);
     procedure mniHelpClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -90,25 +82,41 @@ type
     procedure mniColourOnClick(Sender: TObject);
     procedure mniColourOffClick(Sender: TObject);
     procedure mniExitClick(Sender: TObject);
+    procedure mniRestartClick(Sender: TObject);
   private
     { Private declarations }
   public
     { Public declarations }
   end;
 
-const
-  MaxRandom = 25;
+type
+  Level = array[0..4] of Integer;
+
+  Levels = array[0..99] of Level;
 
 var
   Form1: TForm1;
   Lights: array[0..24] of Boolean;
-  WinGame: Boolean;
+  CurrentLevel: Integer;
+  WinGame, IsRandom: Boolean;
   Clicks, RandomDefault: Integer;
   ColourOn, ColourOff: Int64;
+
+const
+  MaxRandom = 25;
+  TheseLevels: Levels = ((0, 0, 21, 0, 0), (21, 21, 0, 21, 21), (10, 27, 27, 27, 10), (0, 27, 0, 17, 27), (15, 23, 23, 24, 27), (0, 0, 21, 21, 14), (15, 17, 17, 17, 15), (0, 4, 10, 21, 10), (10, 31, 14, 26, 7), (14, 14, 14, 0, 0), (21, 21, 21, 21, 14), (31, 10, 27, 14, 10), (8, 20, 10, 5, 2), (0, 0, 2, 2, 2), (0, 2, 0, 2, 0), (1, 1, 1, 1, 31), (0, 0, 4, 14, 31), (4, 10, 21, 10, 4), (21, 0, 21, 0, 21), (0, 0, 17, 0, 0), (30, 2, 14, 2, 2), (14, 17, 17, 17, 14), (0, 0, 28, 12, 4), (0, 0, 17, 31, 18), (1, 3, 7,
+    15, 30), (17, 17, 31, 17, 17), (4, 14, 4, 4, 4), (0, 0, 28, 28, 28), (0, 2, 0, 0, 0), (0, 0, 4, 0, 0), (17, 19, 21, 25, 17), (31, 8, 4, 2, 31), (8, 8, 21, 17, 25), (20, 17, 17, 22, 30), (24, 10, 17, 21, 0), (4, 10, 17, 31, 17), (0, 14, 14, 14, 0), (21, 10, 21, 10, 21), (10, 1, 3, 12, 10), (0, 0, 10, 0, 0), (17, 10, 4, 4, 4), (7, 9, 7, 9, 7), (17, 11, 7, 2, 14), (0, 27, 31, 4, 14), (14, 5, 28, 15, 21), (4, 14, 31, 14, 4), (4, 31, 5, 18, 16), (0, 17, 4, 17, 0), (17, 10, 4, 10, 17), (31, 31, 31, 31, 31), (27,
+    0, 27, 0, 27), (31, 4, 0, 4, 31), (31, 10, 4, 10, 31), (10, 17, 0, 27, 17), (4, 6, 27, 12, 4), (10, 31, 21, 31, 10), (21, 17, 27, 17, 21), (0, 0, 14, 2, 0), (16, 8, 4, 6, 5), (0, 21, 17, 21, 17), (31, 14, 14, 14, 31), (17, 10, 0, 10, 17), (14, 10, 14, 8, 14), (15, 9, 15, 7, 9), (21, 21, 21, 21, 14), (14, 2, 14, 8, 14), (31, 17, 21, 17, 31), (21, 0, 21, 0, 21), (10, 21, 14, 21, 10), (21, 0, 0, 0, 21), (31, 29, 27, 23, 31), (31, 4, 31, 17, 17), (27, 10, 27, 10, 27), (4, 10, 31, 17, 31), (17, 27, 21, 17,
+    17), (31, 21, 31, 21, 31), (14, 4, 4, 4, 14), (14, 10, 31, 14, 27), (0, 0, 4, 0, 0), (17, 0, 4, 0, 17), (27, 27, 0, 27, 27), (10, 0, 17, 14, 4), (21, 14, 27, 14, 21), (17, 19, 21, 25, 17), (21, 21, 27, 21, 21), (4, 4, 14, 21, 21), (21, 21, 21, 21, 31), (0, 14, 14, 14, 0), (4, 10, 17, 31, 17), (21, 10, 21, 10, 21), (17, 14, 10, 14, 17), (4, 10, 17, 10, 4), (21, 0, 10, 0, 21), (10, 31, 10, 31, 10), (31, 21, 31, 29, 31), (17, 10, 4, 10, 17), (31, 4, 31, 4, 31), (31, 14, 4, 14, 31), (4, 21, 31, 21, 4), (31, 31, 31, 31, 31));
 
 implementation
 
 {$R *.dfm}
+
+function Pow2(Power: Integer): Integer; //This works fine
+begin
+  Result := 1 shl Power;
+end;
 
 procedure TForm1.CheckWin;
 var
@@ -124,7 +132,22 @@ begin
   Inc(Clicks);
   mniClicks.Caption := ' Clicks: ' + IntToStr(Clicks);
   if WinGame then
-    ShowMessage('You win in ' + IntToStr(Clicks) + ' clicks!');
+  begin
+    if IsRandom then
+    begin
+      ShowMessage('You win in ' + IntToStr(Clicks) + ' clicks!');
+      RestartLevel();
+      Exit;
+    end;
+    if CurrentLevel < 99 then
+    begin
+      ShowMessage('You win in ' + IntToStr(Clicks) + ' clicks!');
+      Inc(CurrentLevel);
+      RestartLevel();
+    end
+    else
+      ShowMessage('You have completed the last level in ' + IntToStr(Clicks) + ' clicks!');
+  end;
 end;
 
 procedure TForm1.ClearAll;
@@ -140,6 +163,24 @@ begin
   WinGame := False;
   Clicks := 0;
   mniClicks.Caption := 'Clicks: 0';
+end;
+
+procedure TForm1.RestartLevel;
+var
+  Row, Col, ThisRow: Integer;
+begin
+  ClearAll();
+  for Row := 0 to 4 do
+  begin
+    ThisRow := TheseLevels[CurrentLevel][Row];
+    for Col := 0 to 4 do
+    begin
+      if (ThisRow and Pow2(Col)) = Pow2(Col) then
+        Invert(Row * 5 + Col);
+    end;
+  end;
+  Form1.Caption := 'SliLights, Level ' + IntToStr(CurrentLevel + 1);
+  IsRandom := False;
 end;
 
 procedure TForm1.Invert(Index: Integer);
@@ -219,66 +260,6 @@ begin
   ShowMessage('Rule: switch off all lights to win!' + sLineBreak + sLineBreak + 'Bottom row' + #9 + 'Top row' + sLineBreak + 'O---O' + #9 + #9 + 'OO---' + sLineBreak + '-O-O-' + #9 + #9 + 'O--O-' + sLineBreak + 'OOO--' + #9 + #9 + '-O---' + sLineBreak + '--OOO' + #9 + #9 + '---O-' + sLineBreak + 'O-OO-' + #9 + #9 + '----O' + sLineBreak + '-OO-O' + #9 + #9 + 'O----' + sLineBreak + 'OO-OO' + #9 + #9 + '--O-- ');
 end;
 
-procedure TForm1.mniLevel1Click(Sender: TObject);
-begin
-  ClearAll;
-  Invert(10);
-  Invert(12);
-  Invert(14);
-end;
-
-procedure TForm1.mniLevel2Click(Sender: TObject);
-begin
-  ClearAll;
-  Invert(12);
-  Invert(16);
-  Invert(17);
-  Invert(18);
-  Invert(20);
-  Invert(21);
-  Invert(22);
-  Invert(23);
-  Invert(24);
-end;
-
-procedure TForm1.mniLevel3Click(Sender: TObject);
-begin
-  ClearAll;
-  Invert(4);
-  Invert(6);
-  Invert(7);
-  Invert(8);
-  Invert(11);
-  Invert(12);
-  Invert(13);
-  Invert(16);
-  Invert(17);
-  Invert(18);
-  Invert(24);
-end;
-
-procedure TForm1.mniLevel4Click(Sender: TObject);
-begin
-  ClearAll;
-  Invert(2);
-  Invert(6);
-  Invert(8);
-  Invert(10);
-  Invert(12);
-  Invert(14);
-  Invert(16);
-  Invert(18);
-  Invert(22);
-end;
-
-procedure TForm1.mniLevel5Click(Sender: TObject);
-begin
-  ClearAll;
-  Invert(11);
-  Invert(16);
-  Invert(21);
-end;
-
 procedure TForm1.mniRandomClick(Sender: TObject);
 var
   i: Integer;
@@ -294,6 +275,13 @@ begin
   Randomize;
   for i := 1 to RandomDefault do
     Press(Random(25));
+  Form1.Caption := 'SliLights, random level';
+  IsRandom := True;
+end;
+
+procedure TForm1.mniRestartClick(Sender: TObject);
+begin
+  RestartLevel();
 end;
 
 procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
@@ -305,6 +293,7 @@ begin
   myINI.WriteInteger('Settings', 'ColourOn', ColourOn);
   myINI.WriteInteger('Settings', 'ColourOff', ColourOff);
   myINI.WriteInteger('Settings', 'RandomDefault', RandomDefault);
+  myINI.WriteInteger('Settings', 'CurrentLevel', CurrentLevel);
   myINI.Free;
 end;
 
@@ -318,6 +307,7 @@ begin
   ColourOn := myINI.ReadInteger('Settings', 'ColourOn', $00FF80FF);
   ColourOff := myINI.ReadInteger('Settings', 'ColourOff', $00C08080);
   RandomDefault := myINI.ReadInteger('Settings', 'RandomDefault', 6);
+  CurrentLevel := myINI.ReadInteger('Settings', 'CurrentLevel', 0);
   if RandomDefault > MaxRandom then
     RandomDefault := MaxRandom;
   myINI.Free;
@@ -325,6 +315,7 @@ begin
   WinGame := True;
   Form1.ClientWidth := 5 * shp1.Width;
   Form1.ClientHeight := 5 * shp1.Height;
+  RestartLevel();
 end;
 
 procedure TForm1.shp1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);

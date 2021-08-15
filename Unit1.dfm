@@ -4,7 +4,7 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'SliLights'
-  ClientHeight = 306
+  ClientHeight = 331
   ClientWidth = 310
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -92,200 +92,200 @@ object Form1: TForm1
   object shp1: TShape
     Left = 0
     Top = 0
-    Width = 60
-    Height = 60
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp1MouseDown
   end
   object shp2: TShape
-    Left = 60
+    Left = 70
     Top = 0
-    Width = 60
-    Height = 60
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp2MouseDown
   end
   object shp3: TShape
-    Left = 120
+    Left = 140
     Top = 0
-    Width = 60
-    Height = 60
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp3MouseDown
   end
   object shp4: TShape
-    Left = 180
+    Left = 210
     Top = 0
-    Width = 60
-    Height = 60
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp4MouseDown
   end
   object shp5: TShape
-    Left = 240
+    Left = 280
     Top = 0
-    Width = 60
-    Height = 60
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp5MouseDown
   end
   object shp6: TShape
     Left = 0
-    Top = 60
-    Width = 60
-    Height = 60
+    Top = 70
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp6MouseDown
   end
   object shp7: TShape
-    Left = 60
-    Top = 60
-    Width = 60
-    Height = 60
+    Left = 70
+    Top = 70
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp7MouseDown
   end
   object shp8: TShape
-    Left = 120
-    Top = 60
-    Width = 60
-    Height = 60
+    Left = 140
+    Top = 70
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp8MouseDown
   end
   object shp9: TShape
-    Left = 180
-    Top = 60
-    Width = 60
-    Height = 60
+    Left = 210
+    Top = 70
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp9MouseDown
   end
   object shp10: TShape
-    Left = 240
-    Top = 60
-    Width = 60
-    Height = 60
+    Left = 280
+    Top = 70
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp10MouseDown
   end
   object shp11: TShape
     Left = 0
-    Top = 120
-    Width = 60
-    Height = 60
+    Top = 140
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp11MouseDown
   end
   object shp12: TShape
-    Left = 60
-    Top = 120
-    Width = 60
-    Height = 60
+    Left = 70
+    Top = 140
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp12MouseDown
   end
   object shp13: TShape
-    Left = 120
-    Top = 120
-    Width = 60
-    Height = 60
+    Left = 140
+    Top = 140
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp13MouseDown
   end
   object shp14: TShape
-    Left = 180
-    Top = 120
-    Width = 60
-    Height = 60
+    Left = 210
+    Top = 140
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp14MouseDown
   end
   object shp15: TShape
-    Left = 240
-    Top = 120
-    Width = 60
-    Height = 60
+    Left = 280
+    Top = 140
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp15MouseDown
   end
   object shp16: TShape
     Left = 0
-    Top = 180
-    Width = 60
-    Height = 60
+    Top = 210
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp16MouseDown
   end
   object shp17: TShape
-    Left = 60
-    Top = 180
-    Width = 60
-    Height = 60
+    Left = 70
+    Top = 210
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp17MouseDown
   end
   object shp18: TShape
-    Left = 120
-    Top = 180
-    Width = 60
-    Height = 60
+    Left = 140
+    Top = 210
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp18MouseDown
   end
   object shp19: TShape
-    Left = 180
-    Top = 180
-    Width = 60
-    Height = 60
+    Left = 210
+    Top = 210
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp19MouseDown
   end
   object shp20: TShape
-    Left = 240
-    Top = 180
-    Width = 60
-    Height = 60
+    Left = 280
+    Top = 210
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp20MouseDown
   end
   object shp21: TShape
     Left = 0
-    Top = 240
-    Width = 60
-    Height = 60
+    Top = 280
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp21MouseDown
   end
   object shp22: TShape
-    Left = 60
-    Top = 240
-    Width = 60
-    Height = 60
+    Left = 70
+    Top = 280
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp22MouseDown
   end
   object shp23: TShape
-    Left = 120
-    Top = 240
-    Width = 60
-    Height = 60
+    Left = 140
+    Top = 280
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp23MouseDown
   end
   object shp24: TShape
-    Left = 180
-    Top = 240
-    Width = 60
-    Height = 60
+    Left = 210
+    Top = 280
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp24MouseDown
   end
   object shp25: TShape
-    Left = 240
-    Top = 240
-    Width = 60
-    Height = 60
+    Left = 280
+    Top = 280
+    Width = 70
+    Height = 70
     Brush.Color = clMaroon
     OnMouseDown = shp25MouseDown
   end
@@ -294,30 +294,10 @@ object Form1: TForm1
     Top = 168
     object mniMenu: TMenuItem
       Caption = 'Game'
-      object mniLevel1: TMenuItem
-        Caption = 'Level 1'
-        ShortCut = 120
-        OnClick = mniLevel1Click
-      end
-      object mniLevel2: TMenuItem
-        Caption = 'Level 2'
-        ShortCut = 113
-        OnClick = mniLevel2Click
-      end
-      object mniLevel3: TMenuItem
-        Caption = 'Level 3'
-        ShortCut = 114
-        OnClick = mniLevel3Click
-      end
-      object mniLevel4: TMenuItem
-        Caption = 'Level 4'
-        ShortCut = 115
-        OnClick = mniLevel4Click
-      end
-      object mniLevel5: TMenuItem
-        Caption = 'Level 5'
-        ShortCut = 116
-        OnClick = mniLevel5Click
+      object mniRestart: TMenuItem
+        Caption = 'Re-start level'
+        ShortCut = 16467
+        OnClick = mniRestartClick
       end
       object mniRandom: TMenuItem
         Caption = 'Random'
