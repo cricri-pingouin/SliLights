@@ -50,6 +50,14 @@ type
     procedure Invert(Index: Integer);
     procedure Press(Index: Integer);
     procedure UserPress(Index: Integer);
+    procedure FormCreate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var Action: TCloseAction);
+    procedure mniRestartClick(Sender: TObject);
+    procedure mniRandomClick(Sender: TObject);
+    procedure mniExitClick(Sender: TObject);
+    procedure mniColourOnClick(Sender: TObject);
+    procedure mniColourOffClick(Sender: TObject);
+    procedure mniHelpClick(Sender: TObject);
     procedure shp1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure shp2MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure shp3MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
@@ -75,14 +83,6 @@ type
     procedure shp23MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure shp24MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure shp25MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-    procedure mniRandomClick(Sender: TObject);
-    procedure mniHelpClick(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure FormClose(Sender: TObject; var Action: TCloseAction);
-    procedure mniColourOnClick(Sender: TObject);
-    procedure mniColourOffClick(Sender: TObject);
-    procedure mniExitClick(Sender: TObject);
-    procedure mniRestartClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -97,9 +97,8 @@ type
 var
   Form1: TForm1;
   Lights: array[0..24] of Boolean;
-  CurrentLevel: Integer;
   WinGame, IsRandom: Boolean;
-  Clicks, RandomDefault: Integer;
+  Clicks, RandomDefault, CurrentLevel: Integer;
   ColourOn, ColourOff: Int64;
 
 const
@@ -218,38 +217,41 @@ begin
   CheckWin;
 end;
 
-procedure TForm1.mniColourOffClick(Sender: TObject);
+procedure TForm1.FormCreate(Sender: TObject);
 var
-  Dlg: TColorDialog;
+  myINI: TINIFile;
 begin
-  Dlg := TColorDialog.Create(Form1);
-  if Dlg.Execute then
-  begin
-    ColourOff := Dlg.Color;
-    ShowMessage('You will need to start a new game for this change to take effect.');
-  end;
+  //Initialise options from INI file
+  myINI := TINIFile.Create(ExtractFilePath(Application.EXEName) + 'SliLights.ini');
+  //Read settings from INI file
+  ColourOn := myINI.ReadInteger('Settings', 'ColourOn', $00FF80FF);
+  ColourOff := myINI.ReadInteger('Settings', 'ColourOff', $00C08080);
+  RandomDefault := myINI.ReadInteger('Settings', 'RandomDefault', 6);
+  CurrentLevel := myINI.ReadInteger('Settings', 'CurrentLevel', 0);
+  if RandomDefault > MaxRandom then
+    RandomDefault := MaxRandom;
+  myINI.Free;
+  Form1.ClientWidth := 5 * shp1.Width;
+  Form1.ClientHeight := 5 * shp1.Height;
+  RestartLevel();
 end;
 
-procedure TForm1.mniColourOnClick(Sender: TObject);
+procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
 var
-  Dlg: TColorDialog;
+  myINI: TINIFile;
 begin
-  Dlg := TColorDialog.Create(Form1);
-  if Dlg.Execute then
-  begin
-    ColourOn := Dlg.Color;
-    ShowMessage('You will need to start a new game for this change to take effect.');
-  end;
+  //Save settings to INI file
+  myINI := TINIFile.Create(ExtractFilePath(Application.EXEName) + 'SliLights.ini');
+  myINI.WriteInteger('Settings', 'ColourOn', ColourOn);
+  myINI.WriteInteger('Settings', 'ColourOff', ColourOff);
+  myINI.WriteInteger('Settings', 'RandomDefault', RandomDefault);
+  myINI.WriteInteger('Settings', 'CurrentLevel', CurrentLevel);
+  myINI.Free;
 end;
 
-procedure TForm1.mniExitClick(Sender: TObject);
+procedure TForm1.mniRestartClick(Sender: TObject);
 begin
-  Close;
-end;
-
-procedure TForm1.mniHelpClick(Sender: TObject);
-begin
-  ShowMessage('Rule: switch off all lights to win!' + sLineBreak + sLineBreak + 'Bottom row' + #9 + 'Top row' + sLineBreak + 'O---O' + #9 + #9 + 'OO---' + sLineBreak + '-O-O-' + #9 + #9 + 'O--O-' + sLineBreak + 'OOO--' + #9 + #9 + '-O---' + sLineBreak + '--OOO' + #9 + #9 + '---O-' + sLineBreak + 'O-OO-' + #9 + #9 + '----O' + sLineBreak + '-OO-O' + #9 + #9 + 'O----' + sLineBreak + 'OO-OO' + #9 + #9 + '--O-- ');
+  RestartLevel();
 end;
 
 procedure TForm1.mniRandomClick(Sender: TObject);
@@ -271,41 +273,38 @@ begin
   IsRandom := True;
 end;
 
-procedure TForm1.mniRestartClick(Sender: TObject);
+procedure TForm1.mniExitClick(Sender: TObject);
 begin
-  RestartLevel();
+  Close;
 end;
 
-procedure TForm1.FormClose(Sender: TObject; var Action: TCloseAction);
+procedure TForm1.mniColourOnClick(Sender: TObject);
 var
-  myINI: TINIFile;
+  Dlg: TColorDialog;
 begin
-  //Save settings to INI file
-  myINI := TINIFile.Create(ExtractFilePath(Application.EXEName) + 'SliLights.ini');
-  myINI.WriteInteger('Settings', 'ColourOn', ColourOn);
-  myINI.WriteInteger('Settings', 'ColourOff', ColourOff);
-  myINI.WriteInteger('Settings', 'RandomDefault', RandomDefault);
-  myINI.WriteInteger('Settings', 'CurrentLevel', CurrentLevel);
-  myINI.Free;
+  Dlg := TColorDialog.Create(Form1);
+  if Dlg.Execute then
+  begin
+    ColourOn := Dlg.Color;
+    ShowMessage('You will need to start a new game for this change to take effect.');
+  end;
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure TForm1.mniColourOffClick(Sender: TObject);
 var
-  myINI: TINIFile;
+  Dlg: TColorDialog;
 begin
-  //Initialise options from INI file
-  myINI := TINIFile.Create(ExtractFilePath(Application.EXEName) + 'SliLights.ini');
-  //Read settings from INI file
-  ColourOn := myINI.ReadInteger('Settings', 'ColourOn', $00FF80FF);
-  ColourOff := myINI.ReadInteger('Settings', 'ColourOff', $00C08080);
-  RandomDefault := myINI.ReadInteger('Settings', 'RandomDefault', 6);
-  CurrentLevel := myINI.ReadInteger('Settings', 'CurrentLevel', 0);
-  if RandomDefault > MaxRandom then
-    RandomDefault := MaxRandom;
-  myINI.Free;
-  Form1.ClientWidth := 5 * shp1.Width;
-  Form1.ClientHeight := 5 * shp1.Height;
-  RestartLevel();
+  Dlg := TColorDialog.Create(Form1);
+  if Dlg.Execute then
+  begin
+    ColourOff := Dlg.Color;
+    ShowMessage('You will need to start a new game for this change to take effect.');
+  end;
+end;
+
+procedure TForm1.mniHelpClick(Sender: TObject);
+begin
+  ShowMessage('Rule: switch off all lights to win!' + sLineBreak + sLineBreak + 'Bottom row' + #9 + 'Top row' + sLineBreak + 'O---O' + #9 + #9 + 'OO---' + sLineBreak + '-O-O-' + #9 + #9 + 'O--O-' + sLineBreak + 'OOO--' + #9 + #9 + '-O---' + sLineBreak + '--OOO' + #9 + #9 + '---O-' + sLineBreak + 'O-OO-' + #9 + #9 + '----O' + sLineBreak + '-OO-O' + #9 + #9 + 'O----' + sLineBreak + 'OO-OO' + #9 + #9 + '--O-- ');
 end;
 
 procedure TForm1.shp1MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
