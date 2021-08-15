@@ -164,16 +164,13 @@ end;
 
 procedure TForm1.RestartLevel;
 var
-  Row, Col, ThisRow: Integer;
+  Row, Col: Integer;
 begin
   ClearAll();
   for Row := 0 to 4 do
-  begin
-    ThisRow := TheseLevels[CurrentLevel][Row];
     for Col := 0 to 4 do
-      if (ThisRow and (1 shl Col)) = (1 shl Col) then
+      if (TheseLevels[CurrentLevel][Row] and (1 shl Col)) = (1 shl Col) then
         Invert(Row * 5 + Col);
-  end;
   Form1.Caption := 'SliLights, Level ' + IntToStr(CurrentLevel + 1);
   IsRandom := False;
 end;
