@@ -2,6 +2,12 @@
 A Lights Out game clone, with some levels built in and random levels generator. Written in Turbo Delphi.
 
 ----------------
+v1.2, 16/08/2021
+----------------
+Added option to play any level. Once completed, you go back to the latest completed level. This saves the hassle of having to fiddle with the .ini file.
+Also note that deleting the .ini file loses your colour settings, so prefer changing the CurrentLevel value in the .ini file rather than deleting the file to start again from level 1.
+
+----------------
 v1.1, 15/08/2021
 ----------------
 I eventually bought a Lights Out 2000 from eBay, and started looking for solutions. While doing so, I found the following:
