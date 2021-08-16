@@ -44,6 +44,7 @@ type
     mniColourOff: TMenuItem;
     mniN1: TMenuItem;
     mniExit: TMenuItem;
+    mniSelect: TMenuItem;
     procedure CheckWin;
     procedure ClearAll;
     procedure RestartLevel;
@@ -83,6 +84,7 @@ type
     procedure shp23MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure shp24MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
     procedure shp25MouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+    procedure mniSelectClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -98,7 +100,7 @@ var
   Form1: TForm1;
   Lights: array[0..24] of Boolean;
   WinGame, IsRandom: Boolean;
-  Clicks, RandomDefault, CurrentLevel: Integer;
+  Clicks, RandomDefault, CurrentLevel, BackupLevel: Integer;
   ColourOn, ColourOff: Int64;
 
 const
@@ -132,10 +134,18 @@ begin
       ShowMessage('You won a ' + IntToStr(RandomDefault) + ' clicks random level in ' + IntToStr(Clicks) + ' clicks!');
       RestartLevel();
     end
+    else if BackupLevel > -1 then
+    begin
+      ShowMessage('You won level ' + IntToStr(CurrentLevel + 1) + ' in ' + IntToStr(Clicks) + ' clicks!');
+      CurrentLevel := BackupLevel;
+      BackupLevel := -1;
+      RestartLevel();
+    end
     else if CurrentLevel < 99 then
     begin
       ShowMessage('You won level ' + IntToStr(CurrentLevel + 1) + ' in ' + IntToStr(Clicks) + ' clicks!');
-      Inc(CurrentLevel);
+      if BackupLevel = -1 then
+        Inc(CurrentLevel);
       RestartLevel();
     end
     else
@@ -233,6 +243,7 @@ begin
   myINI.Free;
   Form1.ClientWidth := 5 * shp1.Width;
   Form1.ClientHeight := 5 * shp1.Height;
+  BackupLevel := -1;
   RestartLevel();
 end;
 
@@ -252,6 +263,25 @@ end;
 procedure TForm1.mniRestartClick(Sender: TObject);
 begin
   RestartLevel();
+end;
+
+procedure TForm1.mniSelectClick(Sender: TObject);
+var
+  i: Integer;
+  Choice: string;
+begin
+  if not InputQuery(Application.Title, 'Select a level to play (1-100)', Choice) then
+    Exit;
+  if Choice <> '' then
+  begin
+    BackupLevel := CurrentLevel;
+    CurrentLevel := strtoint(Choice) - 1;
+    if CurrentLevel < 0 then
+      CurrentLevel := 0;
+    if CurrentLevel > 99 then
+      CurrentLevel := 99;
+    RestartLevel();
+  end;
 end;
 
 procedure TForm1.mniRandomClick(Sender: TObject);

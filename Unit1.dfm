@@ -4,7 +4,7 @@ object Form1: TForm1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'SliLights'
-  ClientHeight = 331
+  ClientHeight = 356
   ClientWidth = 310
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -298,6 +298,11 @@ object Form1: TForm1
         Caption = 'Re-start level'
         ShortCut = 16467
         OnClick = mniRestartClick
+      end
+      object mniSelect: TMenuItem
+        Caption = 'Choose a level'
+        ShortCut = 16451
+        OnClick = mniSelectClick
       end
       object mniRandom: TMenuItem
         Caption = 'Random'
