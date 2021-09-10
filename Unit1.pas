@@ -238,6 +238,8 @@ begin
   ColourOff := myINI.ReadInteger('Settings', 'ColourOff', $00C08080);
   RandomDefault := myINI.ReadInteger('Settings', 'RandomDefault', 6);
   CurrentLevel := myINI.ReadInteger('Settings', 'CurrentLevel', 0);
+  if CurrentLevel > 0 then
+    CurrentLevel := CurrentLevel - 1;
   if RandomDefault > MaxRandom then
     RandomDefault := MaxRandom;
   myINI.Free;
@@ -256,7 +258,7 @@ begin
   myINI.WriteInteger('Settings', 'ColourOn', ColourOn);
   myINI.WriteInteger('Settings', 'ColourOff', ColourOff);
   myINI.WriteInteger('Settings', 'RandomDefault', RandomDefault);
-  myINI.WriteInteger('Settings', 'CurrentLevel', CurrentLevel);
+  myINI.WriteInteger('Settings', 'CurrentLevel', CurrentLevel + 1);
   myINI.Free;
 end;
 
