@@ -315,6 +315,7 @@ var
   Dlg: TColorDialog;
 begin
   Dlg := TColorDialog.Create(Form1);
+  Dlg.Color := ColourOn;
   if Dlg.Execute then
   begin
     ColourOn := Dlg.Color;
@@ -327,6 +328,7 @@ var
   Dlg: TColorDialog;
 begin
   Dlg := TColorDialog.Create(Form1);
+  Dlg.Color := ColourOff;
   if Dlg.Execute then
   begin
     ColourOff := Dlg.Color;
