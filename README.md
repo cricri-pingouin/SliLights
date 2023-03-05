@@ -1,5 +1,5 @@
 # SliLights
-A Lights Out game clone, with some levels built in and random levels generator. Written in Turbo Delphi.
+A Tiger Lights Out game clone written in Turbo Delphi. 100 levels built in (50 classic + 50 Lights Out 2000) and random levels generator.
 
 ----------------
 v1.2, 16/08/2021
